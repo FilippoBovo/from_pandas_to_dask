@@ -21,14 +21,14 @@ print(ddf, end="\n\n")
 
 # Simple persistance
 
-data_dir = Path("data.parquet")
-ddf.to_parquet(data_dir)
-ddf_cached = dd.read_parquet(data_dir)
+data_path = Path("data.parquet")
+ddf.to_parquet(data_path)
+ddf_cached = dd.read_parquet(data_path)
 
 print_ddf(ddf_cached, end="\n\n")
 print(ddf_cached, end="\n\n")
 
-shutil.rmtree(data_dir)
+shutil.rmtree(data_path)
 
 
 # DaskDiskCache utility class
