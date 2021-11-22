@@ -152,17 +152,17 @@ def cache(callable: Callable) -> Callable:
 
     @wraps(callable)
     def wrapper(*args, **kwargs):
-        global _caches
+        global _debug_cache
 
-        if _caches is not None:
-            if _caches._current_cache_exists():
-                cache_data = _caches._load_current_cache()
+        if _debug_cache is not None:
+            if _debug_cache._current_cache_exists():
+                cache_data = _debug_cache._load_current_cache()
             else:
                 cache_data = callable(*args, **kwargs)
                 if not isinstance(cache_data, tuple):
-                    cache_data = _caches._cache_new_data(cache_data)
+                    cache_data = _debug_cache._cache_new_data(cache_data)
                 else:
-                    cache_data = _caches._cache_new_data(*cache_data)
+                    cache_data = _debug_cache._cache_new_data(*cache_data)
         else:
             cache_data = callable(*args, **kwargs)
         return cache_data
@@ -170,7 +170,7 @@ def cache(callable: Callable) -> Callable:
     return wrapper
 
 
-_caches: Optional[DebugCache] = None
+_debug_cache: Optional[DebugCache] = None
 
 
 def enable(data_dir: Optional[Path] = None) -> None:
@@ -179,5 +179,5 @@ def enable(data_dir: Optional[Path] = None) -> None:
     :param data_dir: Path of the directory where to cache the data.
         If this argument is not specified, a temporary directory will be used.
     """
-    global _caches
-    _caches = DebugCache(data_dir)
+    global _debug_cache
+    _debug_cache = DebugCache(data_dir)
